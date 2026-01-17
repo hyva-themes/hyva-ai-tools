@@ -6,6 +6,7 @@
 # Usage:
 #   curl -fsSL https://gitlab.hyva.io/hyva-internal/hyva-ai-tools/-/raw/main/install.sh | sh -s claude
 #   curl -fsSL https://gitlab.hyva.io/hyva-internal/hyva-ai-tools/-/raw/main/install.sh | sh -s gemini
+#   curl -fsSL https://gitlab.hyva.io/hyva-internal/hyva-ai-tools/-/raw/main/install.sh | sh -s codex
 #
 # Copyright (c) Hyva Themes https://hyva.io. All rights reserved.
 # Licensed under the OSL-3.0
@@ -55,10 +56,12 @@ usage() {
     echo ""
     echo "Platforms:"
     echo "  claude    Install skills for Claude Code (.claude/skills/)"
+    echo "  codex     Install skills for Codex (.codex/skills/)"
     echo "  gemini    Install skills for Gemini (.gemini/skills/)"
     echo ""
     echo "Examples:"
     echo "  curl -fsSL https://gitlab.hyva.io/hyva-internal/hyva-ai-tools/-/raw/main/install.sh | sh -s claude"
+    echo "  curl -fsSL https://gitlab.hyva.io/hyva-internal/hyva-ai-tools/-/raw/main/install.sh | sh -s codex"
     echo "  curl -fsSL https://gitlab.hyva.io/hyva-internal/hyva-ai-tools/-/raw/main/install.sh | sh -s gemini"
     echo ""
     echo "Environment variables:"
@@ -72,6 +75,9 @@ get_skills_dir() {
     case "$platform" in
         claude)
             echo ".claude/skills"
+            ;;
+        codex)
+            echo ".codex/skills"
             ;;
         gemini)
             echo ".gemini/skills"
