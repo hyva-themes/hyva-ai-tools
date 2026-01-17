@@ -27,7 +27,7 @@ Where `<skill_path>` is the directory containing this SKILL.md file.
 
 Use the `hyva-theme-list` skill to find existing Hyvä themes. Filter the results to only include themes in `app/design/frontend/` (exclude vendor themes).
 
-Use the AskUserQuestion tool to let the user select:
+Prompt the user to select:
 - **Existing Hyvä themes**: List themes returned by the script as options (e.g., `Example/winterWonderTheme`)
 - **Create new theme**: Always include an option to create a new child theme
 

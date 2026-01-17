@@ -9,13 +9,15 @@ Lists all Hyvä theme paths in a Magento 2 project. Themes are identified by the
 
 ## Usage
 
+**Important:** Execute this script from the Magento project root directory.
+
 Run the discovery script to list all Hyvä themes:
 
 ```bash
 bash <skill_path>/scripts/list_hyva_themes.sh
 ```
 
-Where `<skill_path>` is the directory containing this SKILL.md file.
+Where `<skill_path>` is the directory containing this SKILL.md file (e.g., `.claude/skills/hyva-theme-list`).
 
 **Output format:** One theme path per line (relative to project root), or empty output if no themes found.
 

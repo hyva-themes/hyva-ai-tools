@@ -43,17 +43,7 @@ Gather component information:
 
 ### Step 3: Field Selection
 
-Offer field presets or custom field creation:
-
-**Presets:**
-- **Basic Card**: title, description, link
-- **Image Card**: image, title, description, link
-- **CTA Block**: heading, subheading, content (richtext), button_text, link, image
-- **Text Block**: title, content (richtext)
-- **Feature Item**: icon (image), title, description
-- **Testimonial**: quote, author_name, author_title, author_image
-- **Accordion Item**: title, content (richtext), expanded (boolean)
-- **Custom**: Define fields manually
+Offer field presets or custom field creation. See `references/field-types.md` "Field Presets" section for available presets (Basic Card, Image Card, CTA Block, Text Block, Feature Item, Testimonial, Accordion Item) or allow custom field definition.
 
 For custom fields, iterate through each field asking:
 1. Field name (snake_case)

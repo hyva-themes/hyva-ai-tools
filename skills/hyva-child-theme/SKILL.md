@@ -13,7 +13,7 @@ This skill creates a complete Hyvä child theme with the proper directory struct
 
 ### Step 1: Gather Theme Information
 
-Use the AskUserQuestion tool to collect the following information:
+Prompt the user to provide the following information:
 
 **Vendor Name**: The vendor/company namespace (e.g., "Acme", "MyCompany")
 - Must be PascalCase
@@ -33,7 +33,7 @@ If the user has specified a parent theme, use that. The parent can be:
 
 If the user has NOT specified a parent theme, discover available options by invoking the `hyva-theme-list` skill to find all Hyvä themes in the project.
 
-Use AskUserQuestion to let the user select a parent theme:
+Present the user with options to select a parent theme:
 - **Hyvä default themes**: `Hyva/default-csp` (if installed) or `Hyva/default`
 - **Existing Hyvä child themes**: List themes returned by the skill as `{Vendor}/{ThemeName}`
 
@@ -43,7 +43,7 @@ Use AskUserQuestion to let the user select a parent theme:
 
 ### Step 3: Create Theme Directory Structure
 
-Create the theme directory at `app/design/frontend/<Vendor>/<theme-name>/` with:
+Create the theme directory at `app/design/frontend/<Vendor>/<themeName>/` with:
 
 ```
 app/design/frontend/<Vendor>/<themeName>/

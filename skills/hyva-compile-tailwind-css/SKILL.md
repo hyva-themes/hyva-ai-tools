@@ -13,12 +13,7 @@ Use the `hyva-exec-shell-cmd` skill to detect the environment and determine the 
 
 ## Step 2: Identify Theme
 
-If no theme path provided, find available themes:
-```bash
-find app/design/frontend -path "*/web/tailwind/package.json" -type f 2>/dev/null
-```
-
-Only compile themes in `app/design/frontend/` by default. Themes in `vendor/hyva-themes/` require explicit user request.
+If no theme path provided, invoke the `hyva-theme-list` skill to discover available themes. Filter the results to only include themes in `app/design/frontend/` by default. Themes in `vendor/hyva-themes/` require explicit user request.
 
 **If no themes found:** Inform the user that no Hyvä themes with Tailwind configuration were found in `app/design/frontend/`. Ask if they want to check `vendor/hyva-themes/` instead, or if they need to create a child theme first using the `hyva-child-theme` skill.
 
