@@ -39,10 +39,21 @@ Gather component information:
 1. **Component name** (snake_case, e.g., `feature_card`)
 2. **Label** (display name in editor, e.g., "Feature Card")
 3. **Category** (Layout, Elements, Media, Content, or Other)
-4. **Icon** (optional) - Offer these options using AskUserQuestion:
-   - **Use a lucide icon**: Suggest three icons from `vendor/hyva-themes/magento2-theme-module/src/view/base/web/svg/lucide/` with names most fitting for the component purpose. Format as `Hyva_Theme::svg/lucide/[icon-name].svg`. Example suggestions for a "feature card" might be `layout-template.svg`, `credit-card.svg`, `app-window.svg`.
-   - **Custom icon path**: Let the user enter a path in the format `Module_Name::images/custom.svg`
-   - **Skip for now**: No `icon` property will be set in the component definition
+4. **Icon** - Automatically select an appropriate icon:
+
+   **Step 4a: Identify icons already in use**
+   Use the `hyva-cms-components-dump` skill to dump all current CMS components. Extract all `icon` values from the output to build a list of icons already in use by existing components.
+
+   **Step 4b: Find available lucide icons**
+   List the SVG files in `vendor/hyva-themes/magento2-theme-module/src/view/base/web/svg/lucide/` to get the full set of available icons.
+
+   **Step 4c: Select the best fitting icon**
+   From the available lucide icons that are NOT already in use by another component:
+   - Choose the icon whose name best matches the purpose/meaning of the new component
+   - Consider semantic meaning (e.g., `shopping-cart.svg` for cart-related, `image.svg` for image-related, `layout-grid.svg` for grid layouts)
+   - Format the selected icon as `Hyva_Theme::svg/lucide/[icon-name].svg`
+
+   If no suitable unused icon can be found, or if the lucide directory doesn't exist, leave the `icon` property unset.
 
 ### Step 3: Field Selection
 
