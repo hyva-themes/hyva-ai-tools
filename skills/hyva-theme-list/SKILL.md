@@ -51,4 +51,4 @@ Invoke the `hyva-theme-list` skill to discover available themes.
 
 The output can be processed line-by-line or stored in a variable for selection prompts.
 
-<!-- Copyright © Hyvä Themes https://hyva.io. All rights reserved. Licensed under OSL -->
+<!-- Copyright © Hyvä Themes https://hyva.io. All rights reserved. Licensed under OSL 3.0 -->

@@ -162,4 +162,4 @@ ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Acme_CmsComponents', _
 </config>
 ```
 
-<!-- Copyright © Hyvä Themes https://hyva.io. All rights reserved. Licensed under OSL -->
+<!-- Copyright © Hyvä Themes https://hyva.io. All rights reserved. Licensed under OSL 3.0 -->

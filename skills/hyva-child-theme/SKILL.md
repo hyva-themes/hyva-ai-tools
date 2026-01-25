@@ -214,4 +214,4 @@ After successful creation, provide a summary:
   - Run `npm run watch` for development
   - Run `npm run build` before deployment
 
-<!-- Copyright © Hyvä Themes https://hyva.io. All rights reserved. Licensed under OSL -->
+<!-- Copyright © Hyvä Themes https://hyva.io. All rights reserved. Licensed under OSL 3.0 -->

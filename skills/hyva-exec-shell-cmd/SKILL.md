@@ -83,4 +83,4 @@ Skills that need to execute commands should:
 3. Store the wrapper pattern for use throughout the skill
 4. Apply the wrapper to all container commands per Step 2
 
-<!-- Copyright © Hyvä Themes https://hyva.io. All rights reserved. Licensed under OSL -->
+<!-- Copyright © Hyvä Themes https://hyva.io. All rights reserved. Licensed under OSL 3.0 -->

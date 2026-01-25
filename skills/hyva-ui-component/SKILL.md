@@ -163,4 +163,4 @@ For markdown output (e.g., when creating documentation), use `--format=md`.
 
 See `references/components.md` for the full component catalog (only show non-CMS section to users).
 
-<!-- Copyright © Hyvä Themes https://hyva.io. All rights reserved. Licensed under OSL -->
+<!-- Copyright © Hyvä Themes https://hyva.io. All rights reserved. Licensed under OSL 3.0 -->

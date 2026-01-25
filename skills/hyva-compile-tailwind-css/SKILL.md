@@ -45,4 +45,4 @@ Confirm the file was updated by checking its modification time.
 - **Missing node_modules:** Run `npm ci`
 - **Outdated styles:** Clear browser cache; in production mode run `bin/magento setup:static-content:deploy`
 
-<!-- Copyright © Hyvä Themes https://hyva.io. All rights reserved. Licensed under OSL -->
+<!-- Copyright © Hyvä Themes https://hyva.io. All rights reserved. Licensed under OSL 3.0 -->

@@ -414,4 +414,4 @@ Placeholders:
 5. **Include design/advanced sections** via includes for consistency
 6. **Validate component names** are snake_case with only lowercase letters, numbers, and underscores
 
-<!-- Copyright © Hyvä Themes https://hyva.io. All rights reserved. Licensed under OSL -->
+<!-- Copyright © Hyvä Themes https://hyva.io. All rights reserved. Licensed under OSL 3.0 -->

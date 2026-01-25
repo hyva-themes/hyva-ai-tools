@@ -63,4 +63,4 @@ This skill can be used to:
 - Check for component name conflicts between modules
 - Export component definitions for documentation
 
-<!-- Copyright © Hyvä Themes https://hyva.io. All rights reserved. Licensed under OSL -->
+<!-- Copyright © Hyvä Themes https://hyva.io. All rights reserved. Licensed under OSL 3.0 -->

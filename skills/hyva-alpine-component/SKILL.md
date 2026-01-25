@@ -679,4 +679,4 @@ $defaultQty = 1;
 - Example components: `vendor/hyva-themes/magento2-default-theme-csp/`
 - Core utilities: `vendor/hyva-themes/magento2-theme-module/src/view/frontend/templates/page/js/hyva.phtml`
 
-<!-- Copyright © Hyvä Themes https://hyva.io. All rights reserved. Licensed under OSL -->
+<!-- Copyright © Hyvä Themes https://hyva.io. All rights reserved. Licensed under OSL 3.0 -->

@@ -68,4 +68,4 @@ echo $mediaViewModel->getResponsivePictureHtml(
 
 - `references/rendering-images.md` - Complete API reference with method signature, all configuration options, code examples, and best practices
 
-<!-- Copyright © Hyvä Themes https://hyva.io. All rights reserved. Licensed under OSL -->
+<!-- Copyright © Hyvä Themes https://hyva.io. All rights reserved. Licensed under OSL 3.0 -->
