@@ -8,6 +8,7 @@
 #   curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s codex
 #   curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s cursor
 #   curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s gemini
+#   curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s opencode
 #
 # Copyright (c) Hyva Themes https://hyva.io. All rights reserved.
 # Licensed under the OSL-3.0
@@ -60,12 +61,14 @@ usage() {
     echo "  codex     Install skills for Codex (.codex/skills/)"
     echo "  cursor    Install skills for Cursor (.cursor/skills/)"
     echo "  gemini    Install skills for Gemini (.gemini/skills/)"
+    echo "  opencode  Install skills for OpenCode (.opencode/skills/)"
     echo ""
     echo "Examples:"
     echo "  curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s claude"
     echo "  curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s codex"
     echo "  curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s cursor"
     echo "  curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s gemini"
+    echo "  curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s opencode"
     echo ""
     echo "Environment variables:"
     echo "  HYVA_SKILLS_REPO_URL   Custom repository URL"
@@ -87,6 +90,9 @@ get_skills_dir() {
             ;;
         gemini)
             echo ".gemini/skills"
+            ;;
+        opencode)
+            echo ".opencode/skills"
             ;;
         *)
             print_error "Unknown platform: $platform"
