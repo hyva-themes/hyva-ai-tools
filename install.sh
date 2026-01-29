@@ -89,7 +89,7 @@ get_skills_dir() {
             echo ".codex/skills"
             ;;
         copilot)
-            echo ".copilot/skills"
+            echo ".github/skills"
             ;;
         cursor)
             echo ".cursor/skills"

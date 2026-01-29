@@ -53,7 +53,7 @@ curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/head
 2. Copy the skill directories to your project:
     - **Claude Code**: `.claude/skills/`
     - **Codex**: `.codex/skills/`
-    - **GitHub Copilot**: `.copilot/skills/`
+    - **GitHub Copilot**: `.github/skills/`
     - **Cursor**: `.cursor/skills/`
     - **Gemini**: `.gemini/skills/`
     - **OpenCode**: `.opencode/skills/`
