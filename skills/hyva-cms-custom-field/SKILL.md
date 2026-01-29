@@ -1,6 +1,6 @@
 ---
 name: hyva-cms-custom-field
-description: Create custom field types and field handlers for Hyvä CMS components. This skill should be used when the user wants to create a custom CMS field type, add a new input field for CMS components, create a field handler, build a modal-based selector, or create enhanced input controls. Trigger phrases include "create custom field type", "add cms field", "custom field type", "field handler", "modal selector", "product selector", "custom input field", "enhanced dropdown", "searchable select".
+description: Create custom field types and field handlers for Hyvä CMS components. Use when the user mentions Hyvä, Hyva, or CMS together with custom field, custom input, or modal selector (e.g. hyva custom field, custom cms field, hyva modal selector, custom hyva input, custom cms input). Do not use for generic form or UI work outside Hyvä CMS.
 ---
 
 # Hyvä CMS Custom Field Type Creator
@@ -166,12 +166,6 @@ Provide an example of using the custom field type in `components.json`:
     }
 }
 ```
-
-### Step 9: Run Setup
-
-After creating all files, run `bin/magento setup:upgrade` using the appropriate command wrapper detected by the `hyva-exec-shell-cmd` skill.
-
-Flush cache and test the field in the Hyvä CMS editor.
 
 ## Resources
 
@@ -375,4 +369,4 @@ Based on built-in Hyvä CMS handler implementations:
    - ❌ Incorrect: `json_decode($fieldValue)` without type checking (fails if value is already an array)
    - ❌ Incorrect: Using array directly in `value` attribute without JSON-encoding first
 
-<!-- Copyright © Hyvä Themes https://hyva.io. All rights reserved. Licensed under OSL -->
+<!-- Copyright © Hyvä Themes https://hyva.io. All rights reserved. Licensed under OSL 3.0 -->
