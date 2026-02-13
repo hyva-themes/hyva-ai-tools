@@ -15,6 +15,7 @@ knowledge for creating Hyva themes, modules, and CMS components.
 | [hyva-compile-tailwind-css](skills/hyva-compile-tailwind-css/) | Utility skill to compile Tailwind CSS for Hyva themes                                                                           |
 | [hyva-create-module](skills/hyva-create-module/)               | Scaffold new Magento 2 modules in app/code/                                                                                     |
 | [hyva-exec-shell-cmd](skills/hyva-exec-shell-cmd/)             | Utility skill to detect development environment (Warden, docker-magento, local) and execute commands with appropriate wrappers  |
+| [hyva-playwright-test](skills/hyva-playwright-test/)           | Write Playwright tests for Hyvä themes with Alpine.js                                                                           |
 | [hyva-render-media-image](skills/hyva-render-media-image/)     | Generate responsive `<picture>` elements using the Hyva Media view model                                                        |
 | [hyva-theme-list](skills/hyva-theme-list/)                     | List all Hyva theme paths in a Magento 2 project                                                                                |
 | [hyva-ui-component](skills/hyva-ui-component/)                 | Install Hyva UI template-based components (headers, footers, galleries, etc.) to themes                                         |
