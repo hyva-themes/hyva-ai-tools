@@ -1,6 +1,6 @@
 ---
-name: hyva-add-exclude
-description: Add a module path to the `exclude` list in `hyva.config.json` for Tailwind configuration. Use this skill when the user wants to exclude a module from Tailwind CSS compilation. Trigger phrases include "exclude module", "add to exclude", "hyva-add-exclude", or when a module path needs to be excluded from Tailwind.
+name: hyva-add-tailwind-exclude
+description: Add a module path to the `exclude` list in `hyva.config.json` for Tailwind configuration. Use this skill when the user wants to exclude a module from Tailwind CSS compilation. Trigger phrases include "exclude module", "add to exclude", "hyva-add-tailwind-exclude", or when a module path needs to be excluded from Tailwind.
 ---
 
 # Add Module to Tailwind Exclude List

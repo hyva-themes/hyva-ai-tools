@@ -7,8 +7,8 @@ knowledge for creating Hyva themes, modules, and CMS components.
 
 | Skill                                                          | Description                                                                                                                     |
 |----------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
-| [hyva-add-exclude](skills/hyva-add-exclude/)                   | Add a module path to the `exclude` list in `hyva.config.json` for Tailwind CSS compilation                                      |
-| [hyva-add-include](skills/hyva-add-include/)                   | Add a module path to the `include` list in `hyva.config.json` for Tailwind CSS compilation                                      |
+| [hyva-add-tailwind-exclude](skills/hyva-add-tailwind-exclude/) | Add a module path to the `exclude` list in `hyva.config.json` for Tailwind CSS compilation                                      |
+| [hyva-add-tailwind-include](skills/hyva-add-tailwind-include/) | Add a module path to the `include` list in `hyva.config.json` for Tailwind CSS compilation                                      |
 | [hyva-alpine-component](skills/hyva-alpine-component/)         | Write CSP-compatible Alpine.js components for Hyvä themes following best practices                                               |
 | [hyva-child-theme](skills/hyva-child-theme/)                   | Create a Hyva child theme with proper directory structure, Tailwind CSS configuration, and theme inheritance                    |
 | [hyva-cms-component](skills/hyva-cms-component/)               | Create custom Hyva CMS components with field presets, variant support, and PHTML templates                                      |
