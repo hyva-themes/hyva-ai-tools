@@ -9,18 +9,18 @@ Adds a module path as a `{ "src": "<PATH>" }` entry to the `tailwind.include` ar
 
 ## Step 1: Find hyva.config.json
 
-Use the Glob tool with pattern `**/hyva.config.json` to find all config files.
+Delegate to the `hyva-theme-list` skill to find all Hyvä themes and their `hyva.config.json` locations.
 
-- If only one file is found, use it directly.
-- If multiple files are found, list them and ask the user which theme(s) to update. Wait for the answer before proceeding.
+- If only one theme is found, use it directly.
+- If multiple themes are found, list them and ask the user which theme(s) to update. Wait for the answer before proceeding.
 
 ## Step 2: Resolve the Module Path
 
-The module path comes from the skill argument (`$ARGUMENTS`).
+If a module name was provided by the user when invoking the skill, use it. Otherwise, prompt the user for the module path to include.
 
 - If the argument contains `/` (e.g. `vendor/vendor-name/module-name`), use it as-is.
 - If the argument is just a module name (e.g. `magento2-hyva-checkout`):
-  1. Use Bash: `find <project-root> -type d -name "MODULE_NAME"`.
+  1. Use the current working directory as the project root. Search for the module directory within it.
   - If no match is found, inform the user and stop.
   - If exactly one match is found, derive its relative path from the project root (e.g. `vendor/hyva-themes/magento2-hyva-checkout`).
   - If multiple matches are found, list them and ask the user which one to use. Wait for the answer before proceeding.
