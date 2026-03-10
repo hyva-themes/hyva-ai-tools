@@ -61,7 +61,6 @@ Once installed, the AI assistant will automatically use these skills when releva
 | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
 | [hyva-cms-component](skills/hyva-cms-component/)             | Create custom Hyva CMS components with field presets, variant support, and PHTML templates |
 | [hyva-cms-custom-field](skills/hyva-cms-custom-field/)       | Create custom field types and field handlers for Hyvä CMS components                       |
-| [hyva-cms-components-dump](skills/hyva-cms-components-dump/) | Dump combined JSON of all available Hyvä CMS components from active modules                |
 
 ### Utility Skills
 
@@ -72,6 +71,7 @@ Once installed, the AI assistant will automatically use these skills when releva
 | [hyva-compile-tailwind-css](skills/hyva-compile-tailwind-css/) | Compile Tailwind CSS for Hyva themes                                                                          |
 | [hyva-exec-shell-cmd](skills/hyva-exec-shell-cmd/)             | Detect development environment (Warden, docker-magento, local) and execute commands with appropriate wrappers |
 | [hyva-theme-list](skills/hyva-theme-list/)                     | List all Hyva theme paths in a Magento 2 project                                                              |
+| [hyva-cms-components-dump](skills/hyva-cms-components-dump/) | Dump combined JSON of all available Hyvä CMS components from active modules                |
 
 ## License
 
