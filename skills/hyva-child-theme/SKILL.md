@@ -7,6 +7,8 @@ description: Create a Hyvä child theme in a Magento 2 project. This skill shoul
 
 This skill creates a complete Hyvä child theme with the proper directory structure, configuration files, and Tailwind CSS build setup.
 
+**Skill deps** (read via `<skill_path>/../{name}/SKILL.md`): `hyva-exec-shell-cmd`, `hyva-theme-list`, `hyva-compile-tailwind-css`
+
 **Command execution:** For commands that need to run inside the development environment (e.g., `bin/magento`), use the `hyva-exec-shell-cmd` skill to detect the environment and determine the appropriate command wrapper.
 
 ## Workflow

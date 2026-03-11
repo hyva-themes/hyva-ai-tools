@@ -7,6 +7,8 @@ description: Compile Tailwind CSS for Hyvä themes in Magento 2. This skill shou
 
 Compiles Tailwind CSS for Hyvä themes in Magento 2. Handles both production builds and development watch mode.
 
+**Skill deps** (read via `<skill_path>/../{name}/SKILL.md`): `hyva-exec-shell-cmd`, `hyva-theme-list`
+
 ## Step 1: Detect Environment & Set Command Wrapper
 
 Use the `hyva-exec-shell-cmd` skill to detect the environment and determine the appropriate command wrapper. All npm commands below show the core command; wrap them according to the detected environment.
