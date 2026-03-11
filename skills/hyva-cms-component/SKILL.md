@@ -9,6 +9,8 @@ description: Create custom Hyvä CMS component. This skill should be used when t
 
 This skill guides the interactive creation of custom Hyvä CMS components for Magento 2. It supports creating components in new or existing modules, with field presets for common patterns and automatic setup:upgrade execution.
 
+**Skill deps** (read via `<skill_path>/../{name}/SKILL.md`): `hyva-exec-shell-cmd`, `hyva-cms-components-dump`, `hyva-create-module`, `hyva-render-media-image`
+
 **Command execution:** For commands that need to run inside the development environment (e.g., `bin/magento`), use the `hyva-exec-shell-cmd` skill to detect the environment and determine the appropriate command wrapper.
 
 ## Workflow

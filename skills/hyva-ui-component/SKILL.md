@@ -7,6 +7,8 @@ description: Apply Hyva UI template-based components to a Hyvä theme. This skil
 
 Applies Hyva UI template-based (non-CMS) components to a Hyvä theme by copying files from `{hyva_ui_path}/components/` to `app/design/frontend/{Vendor}/{Theme}/`.
 
+**Skill deps** (read via `<skill_path>/../{name}/SKILL.md`): `hyva-exec-shell-cmd`, `hyva-theme-list`, `hyva-child-theme`, `hyva-compile-tailwind-css`
+
 **Path variable:** `{hyva_ui_path}` = `vendor/hyva-themes/hyva-ui` (default) or user-provided custom path.
 
 **Command execution:** For any commands that need to run inside the development environment (e.g., `bin/magento` commands), use the `hyva-exec-shell-cmd` skill to detect the environment and determine the appropriate command wrapper.

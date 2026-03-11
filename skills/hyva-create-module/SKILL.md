@@ -7,6 +7,8 @@ description: Create a new Magento 2 module in app/code/. This skill should be us
 
 This utility skill creates new Magento 2 modules in `app/code/`. It is designed to be called by other skills that need module scaffolding.
 
+**Skill deps** (read via `<skill_path>/../{name}/SKILL.md`): `hyva-exec-shell-cmd`
+
 **Command execution:** For commands that need to run inside the development environment (e.g., `bin/magento`), use the `hyva-exec-shell-cmd` skill to detect the environment and determine the appropriate command wrapper.
 
 ## Parameters
