@@ -1,0 +1,14 @@
+{
+  "name": "hyva-ai-tools",
+  "version": "1.0.0",
+  "description": "Hyva AI Tools Plugin",
+  "author": {
+    "name": "Lewis Voncken",
+    "email": "lewis.voncken@gmail.com"
+  },
+  "keywords": ["hyva", "magento", "adobe-commerce", "ecommerce"],
+  "logo": "assets/logo.svg",
+  "repository": "https://github.com/hyva-themes/hyva-ai-tools",
+  "homepage": "https://www.hyva.io/",
+  "license": "OSL-3.0"
+}
