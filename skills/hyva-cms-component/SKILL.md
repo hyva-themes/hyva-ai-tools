@@ -1,6 +1,7 @@
 ---
 name: hyva-cms-component
 description: Create custom Hyvä CMS component. This skill should be used when the user wants to create a new Hyvä CMS component, build a Hyvä component, or needs help with components.json and PHTML templates for Hyvä CMS. Trigger phrases include "create hyva cms component", "add cms component", "new hyva component", "build page hyva cms element", "custom cms element".
+requires: hyva-exec-shell-cmd, hyva-create-module, hyva-cms-components-dump, hyva-render-media-image
 ---
 
 # Hyvä CMS Component Creator
