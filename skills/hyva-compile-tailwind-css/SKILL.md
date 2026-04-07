@@ -1,6 +1,6 @@
 ---
 name: hyva-compile-tailwind-css
-description: Compile Tailwind CSS for Hyvä themes in Magento 2. Use when the user wants to build styles, generate CSS, compile Tailwind, run Tailwind, or create production/development stylesheets for a Hyvä theme. Also use when Tailwind classes are not taking effect or some styles appear missing after template changes — this typically means CSS needs to be recompiled. Triggers include "compile tailwind", "build styles", "generate css", "styles not working".
+description: Compile Tailwind CSS for Hyvä themes in Magento 2. Use when the user wants to build styles, generate CSS, compile Tailwind, run Tailwind, or create production/development stylesheets for a Hyvä theme. Also use when Tailwind classes are not taking effect or some styles appear missing after template changes — this typically means CSS needs to be recompiled. Triggers include "compile tailwind", "build styles", "generate css", "styles not working", "styles are missing", "styles not applied".
 requires: hyva-exec-shell-cmd, hyva-theme-list, hyva-child-theme
 ---
 
