@@ -180,14 +180,19 @@ install_skill() {
     target="$target_dir/$skill_name"
 
     if [ "$INSTALL_MODE" = "copy" ]; then
+        _verb="Installed"
         if [ -d "$target" ]; then
+            # Atomically replace: copy to a temp dir beside the target, then rename
+            _tmp_target="${target}.tmp.$$"
+            rm -rf "$_tmp_target"
+            cp -r "$src" "$_tmp_target"
             rm -rf "$target"
-            cp -r "$src" "$target"
-            print_success "Updated (copy): $skill_name"
+            mv "$_tmp_target" "$target"
+            _verb="Updated"
         else
             cp -r "$src" "$target"
-            print_success "Installed (copy): $skill_name"
         fi
+        print_success "$_verb (copy): $skill_name"
     else
         if [ -L "$target" ]; then
             # Already a symlink - check if it points to the right place
@@ -212,7 +217,7 @@ install_skill() {
     deps="$(get_requires "$skill_name")"
     if [ -n "$deps" ]; then
         # Use a temp file to avoid subshell variable scoping issues
-        dep_file="$(mktemp /tmp/hyva-deps.XXXXXX)"
+        dep_file="$(mktemp "${TMPDIR:-/tmp}/hyva-deps.XXXXXX")"
         echo "$deps" > "$dep_file"
         while read -r dep; do
             if [ -z "$dep" ]; then
@@ -274,6 +279,14 @@ fi
 
 SKILL_NAME="$1"
 AGENT="${2:-}"
+
+# Validate skill name contains no path separators or traversal sequences
+case "$SKILL_NAME" in
+    */* | *..*)
+        print_error "Invalid skill name: $SKILL_NAME (must not contain '/' or '..')"
+        exit 1
+        ;;
+esac
 
 # Validate the skill exists in the repo
 if [ ! -d "$SKILLS_SRC/$SKILL_NAME" ]; then
