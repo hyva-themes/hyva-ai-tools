@@ -58,14 +58,14 @@ When no agent argument is given, the installer will:
 2. Auto-detect an existing agent directory (e.g. `.claude/skills/`) in the current working directory
 3. Prompt you to choose an agent and whether to install globally (`~/`) or locally (`./`)
 
-Supported agents: `claude`, `codex`, `copilot`, `cursor`, `gemini`, `opencode`
+Supported agents: `claude`, `codex`, `copilot`, `cursor`, `gemini`, `junie`, `opencode`
 
 ### Install All Skills at Once (Legacy)
 
 To install all skills in one go (copies instead of symlinks):
 
 ```bash
-# Replace "claude" with your agent: codex, copilot, cursor, gemini, opencode
+# Replace "claude" with your agent: codex, copilot, cursor, gemini, junie, opencode
 curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s claude
 ```
 

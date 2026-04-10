@@ -9,6 +9,7 @@
 #   curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s copilot
 #   curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s cursor
 #   curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s gemini
+#   curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s junie
 #   curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s opencode
 #
 # Copyright (c) Hyva Themes https://hyva.io. All rights reserved.
@@ -63,6 +64,7 @@ usage() {
     echo "  copilot   Install skills for GitHub Copilot (.copilot/skills/)"
     echo "  cursor    Install skills for Cursor (.cursor/skills/)"
     echo "  gemini    Install skills for Gemini (.gemini/skills/)"
+    echo "  junie     Install skills for Junie (.junie/skills/)"
     echo "  opencode  Install skills for OpenCode (.opencode/skills/)"
     echo ""
     echo "Examples:"
@@ -71,6 +73,7 @@ usage() {
     echo "  curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s copilot"
     echo "  curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s cursor"
     echo "  curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s gemini"
+    echo "  curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s junie"
     echo "  curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s opencode"
     echo ""
     echo "Environment variables:"
@@ -96,6 +99,9 @@ get_skills_dir() {
             ;;
         gemini)
             echo ".gemini/skills"
+            ;;
+        junie)
+            echo ".junie/skills"
             ;;
         opencode)
             echo ".opencode/skills"

@@ -42,7 +42,7 @@ INSTALLED_IN_SESSION=""
 INSTALL_MODE="symlink"
 
 # Known agent dot-directories
-KNOWN_AGENT_DIRS=".claude .codex .github .cursor .gemini .opencode"
+KNOWN_AGENT_DIRS=".claude .codex .github .cursor .gemini .junie .opencode"
 
 usage() {
     echo "Usage: $(basename "$0") [--copy] <skill-name> [agent]"
@@ -50,7 +50,7 @@ usage() {
     echo ""
     echo "Arguments:"
     echo "  skill-name   Name of the skill to install (e.g. hyva-child-theme)"
-    echo "  agent        Target agent: claude, codex, copilot, cursor, gemini, opencode"
+    echo "  agent        Target agent: claude, codex, copilot, cursor, gemini, junie, opencode"
     echo "               If omitted, auto-detected or prompted."
     echo ""
     echo "Options:"
@@ -77,10 +77,11 @@ agent_to_dir() {
         copilot)  echo ".github" ;;
         cursor)   echo ".cursor" ;;
         gemini)   echo ".gemini" ;;
+        junie)    echo ".junie" ;;
         opencode) echo ".opencode" ;;
         *)
             print_error "Unknown agent: $1" >&2
-            echo "Supported agents: claude, codex, copilot, cursor, gemini, opencode" >&2
+            echo "Supported agents: claude, codex, copilot, cursor, gemini, junie, opencode" >&2
             exit 1
             ;;
     esac
@@ -118,6 +119,7 @@ dir_to_agent() {
         .github)   echo "copilot" ;;
         .cursor)   echo "cursor" ;;
         .gemini)   echo "gemini" ;;
+        .junie)    echo "junie" ;;
         .opencode) echo "opencode" ;;
         *)         echo "$1" ;;
     esac
@@ -337,7 +339,7 @@ else
             esac
         else
             # Nothing detected, ask the user
-            AGENT="$(prompt_user "No agent directory detected. Enter agent name (claude/codex/copilot/cursor/gemini/opencode): ")"
+            AGENT="$(prompt_user "No agent directory detected. Enter agent name (claude/codex/copilot/cursor/gemini/junie/opencode): ")"
             if [ -z "$AGENT" ]; then
                 print_error "No agent specified."
                 exit 1
