@@ -19,17 +19,17 @@
 
 set -e
 
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[0;33m'
-BLUE='\033[0;34m'
-NC='\033[0m'
+# Colors for output (assigned via printf for POSIX portability)
+RED=$(printf '\033[0;31m')
+GREEN=$(printf '\033[0;32m')
+YELLOW=$(printf '\033[0;33m')
+BLUE=$(printf '\033[0;34m')
+NC=$(printf '\033[0m')
 
-print_success() { echo "${GREEN}[OK]${NC} $1"; }
-print_warning() { echo "${YELLOW}[WARN]${NC} $1"; }
-print_error()   { echo "${RED}[ERROR]${NC} $1"; }
-print_info()    { echo "${BLUE}[INFO]${NC} $1"; }
+print_success() { printf '%s[OK]%s %s\n' "$GREEN" "$NC" "$1"; }
+print_warning() { printf '%s[WARN]%s %s\n' "$YELLOW" "$NC" "$1"; }
+print_error()   { printf '%s[ERROR]%s %s\n' "$RED" "$NC" "$1"; }
+print_info()    { printf '%s[INFO]%s %s\n' "$BLUE" "$NC" "$1"; }
 
 # Resolve the real path of the repo root (where this script lives)
 REPO_ROOT="$(cd "$(dirname "$0")" && pwd -P)"
@@ -40,6 +40,9 @@ INSTALLED_IN_SESSION=""
 
 # Install mode: "symlink" (default) or "copy"
 INSTALL_MODE="symlink"
+
+# Known agent dot-directories
+KNOWN_AGENT_DIRS=".claude .codex .github .cursor .gemini .opencode"
 
 usage() {
     echo "Usage: $(basename "$0") [--copy] <skill-name> [agent]"
@@ -96,16 +99,10 @@ prompt_user() {
 }
 
 # Auto-detect agent directory from CWD
-# Looks for .*/skills directories
+# Checks only known agent dot-directories for a skills subdirectory
 detect_agent_dir() {
-    for dir in ./.*/skills; do
-        if [ -d "$dir" ]; then
-            # Extract the dot-directory name (e.g. .claude)
-            dot_dir="$(echo "$dir" | sed 's|^\./\([^/]*\)/skills$|\1|')"
-            # Skip . and .. and .git
-            case "$dot_dir" in
-                .|..|.git) continue ;;
-            esac
+    for dot_dir in $KNOWN_AGENT_DIRS; do
+        if [ -d "./$dot_dir/skills" ]; then
             echo "$dot_dir"
             return 0
         fi
@@ -124,6 +121,16 @@ dir_to_agent() {
         .opencode) echo "opencode" ;;
         *)         echo "$1" ;;
     esac
+}
+
+# Portable readlink: resolve the target of a symlink
+# Falls back to parsing ls -l output when readlink is not available
+resolve_symlink() {
+    if command -v readlink >/dev/null 2>&1; then
+        readlink "$1" 2>/dev/null || true
+    else
+        ls -l "$1" 2>/dev/null | sed 's/.*-> //' || true
+    fi
 }
 
 # Extract the requires: field from a skill's SKILL.md frontmatter
@@ -145,14 +152,19 @@ is_skill_installed() {
 }
 
 # Install a single skill as a symlink
-# Args: $1 = skill name, $2 = target skills directory
+# Args: $1 = skill name, $2 = target skills directory, $3 = parent skill (optional, for error context)
 install_skill() {
     skill_name="$1"
     target_dir="$2"
+    parent_skill="${3:-}"
     src="$SKILLS_SRC/$skill_name"
 
     if [ ! -d "$src" ]; then
-        print_error "Skill not found: $skill_name"
+        if [ -n "$parent_skill" ]; then
+            print_error "Skill not found: $skill_name (required by $parent_skill)"
+        else
+            print_error "Skill not found: $skill_name"
+        fi
         return 1
     fi
 
@@ -179,7 +191,7 @@ install_skill() {
     else
         if [ -L "$target" ]; then
             # Already a symlink - check if it points to the right place
-            existing="$(readlink "$target" 2>/dev/null || true)"
+            existing="$(resolve_symlink "$target")"
             if [ "$existing" = "$src" ]; then
                 print_info "Already installed: $skill_name"
             else
@@ -200,7 +212,7 @@ install_skill() {
     deps="$(get_requires "$skill_name")"
     if [ -n "$deps" ]; then
         # Use a temp file to avoid subshell variable scoping issues
-        dep_file="$(mktemp)"
+        dep_file="$(mktemp /tmp/hyva-deps.XXXXXX)"
         echo "$deps" > "$dep_file"
         while read -r dep; do
             if [ -z "$dep" ]; then
@@ -210,11 +222,30 @@ install_skill() {
                 print_info "Dependency already present: $dep"
                 INSTALLED_IN_SESSION="$INSTALLED_IN_SESSION $dep"
             else
-                print_info "Installing dependency: $dep"
-                install_skill "$dep" "$target_dir"
+                print_info "Installing dependency: $dep (required by $skill_name)"
+                install_skill "$dep" "$target_dir" "$skill_name"
             fi
         done < "$dep_file"
         rm -f "$dep_file"
+    fi
+}
+
+# Prompt the user for global vs local install and set TARGET_DIR
+# Args: $1 = agent dot-directory (e.g. .claude)
+resolve_target_dir() {
+    _agent_dir="$1"
+    if [ -d "./$_agent_dir" ]; then
+        TARGET_DIR="./$_agent_dir/skills"
+    else
+        _answer="$(prompt_user "No $_agent_dir directory found in current directory. Install (g)lobally in ~/$_agent_dir/skills or (l)ocally in ./$_agent_dir/skills? [g/l]: ")"
+        case "$_answer" in
+            l|L|local)
+                TARGET_DIR="./$_agent_dir/skills"
+                ;;
+            *)
+                TARGET_DIR="$HOME/$_agent_dir/skills"
+                ;;
+        esac
     fi
 }
 
@@ -261,39 +292,14 @@ fi
 if [ -n "$AGENT" ]; then
     # Agent explicitly provided
     agent_dir="$(agent_to_dir "$AGENT")"
-
-    if [ -d "./$agent_dir" ]; then
-        TARGET_DIR="./$agent_dir/skills"
-    else
-        answer="$(prompt_user "No $agent_dir directory found in current directory. Install (g)lobally in ~/$agent_dir/skills or (l)ocally in ./$agent_dir/skills? [g/l]: ")"
-        case "$answer" in
-            l|L|local)
-                TARGET_DIR="./$agent_dir/skills"
-                ;;
-            *)
-                TARGET_DIR="$HOME/$agent_dir/skills"
-                ;;
-        esac
-    fi
+    resolve_target_dir "$agent_dir"
 else
     # No agent specified - try to resolve
     if [ -n "${HYVA_SKILLS_AGENT:-}" ]; then
         # Environment variable set - use it directly
         AGENT="$HYVA_SKILLS_AGENT"
         agent_dir="$(agent_to_dir "$AGENT")"
-        if [ -d "./$agent_dir" ]; then
-            TARGET_DIR="./$agent_dir/skills"
-        else
-            answer="$(prompt_user "No $agent_dir directory found in current directory. Install (g)lobally in ~/$agent_dir/skills or (l)ocally in ./$agent_dir/skills? [g/l]: ")"
-            case "$answer" in
-                l|L|local)
-                    TARGET_DIR="./$agent_dir/skills"
-                    ;;
-                *)
-                    TARGET_DIR="$HOME/$agent_dir/skills"
-                    ;;
-            esac
-        fi
+        resolve_target_dir "$agent_dir"
         print_info "Using agent from HYVA_SKILLS_AGENT: $AGENT"
     else
         # Try auto-detection
@@ -313,19 +319,7 @@ else
                     # User specified an alternative agent
                     AGENT="$answer"
                     agent_dir="$(agent_to_dir "$AGENT")"
-                    if [ -d "./$agent_dir" ]; then
-                        TARGET_DIR="./$agent_dir/skills"
-                    else
-                        answer2="$(prompt_user "No $agent_dir directory found. Install (g)lobally in ~/$agent_dir/skills or (l)ocally in ./$agent_dir/skills? [g/l]: ")"
-                        case "$answer2" in
-                            l|L|local)
-                                TARGET_DIR="./$agent_dir/skills"
-                                ;;
-                            *)
-                                TARGET_DIR="$HOME/$agent_dir/skills"
-                                ;;
-                        esac
-                    fi
+                    resolve_target_dir "$agent_dir"
                     ;;
             esac
         else
@@ -336,15 +330,7 @@ else
                 exit 1
             fi
             agent_dir="$(agent_to_dir "$AGENT")"
-            answer="$(prompt_user "Install (g)lobally in ~/$agent_dir/skills or (l)ocally in ./$agent_dir/skills? [g/l]: ")"
-            case "$answer" in
-                l|L|local)
-                    TARGET_DIR="./$agent_dir/skills"
-                    ;;
-                *)
-                    TARGET_DIR="$HOME/$agent_dir/skills"
-                    ;;
-            esac
+            resolve_target_dir "$agent_dir"
         fi
     fi
 fi
