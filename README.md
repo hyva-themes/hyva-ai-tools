@@ -24,9 +24,46 @@ knowledge for creating Hyva themes, modules, and CMS components.
 
 ## Installation
 
-Always install all skills together, as they often refer to each other.
+### Install Individual Skills (Recommended)
 
-### Quick Install
+Clone this repository, then use `install-hyva-skill.sh` to install individual skills by name.
+Dependencies are resolved automatically.
+
+```bash
+git clone https://github.com/hyva-themes/hyva-ai-tools.git
+cd hyva-ai-tools
+
+# Install a skill for a specific agent (from your project directory)
+./install-hyva-skill.sh hyva-child-theme claude
+
+# Or let the installer auto-detect the agent directory
+./install-hyva-skill.sh hyva-cms-component
+
+# List all available skills
+./install-hyva-skill.sh --list
+```
+
+Skills are symlinked into the target agent's skills directory.
+To update all installed skills, simply run `git pull` inside the cloned repository — every symlinked skill picks up the changes immediately.
+
+Use `--copy` to copy skills instead of symlinking (e.g. when the repo is on the host but the agent runs in a container):
+
+```bash
+./install-hyva-skill.sh --copy hyva-child-theme claude
+```
+
+Copied skills won't update automatically with `git pull` — re-run the install command to update them.
+
+When no agent argument is given, the installer will:
+1. Use the `HYVA_SKILLS_AGENT` environment variable if set
+2. Auto-detect an existing agent directory (e.g. `.claude/skills/`) in the current working directory
+3. Prompt you to choose an agent and whether to install globally (`~/`) or locally (`./`)
+
+Supported agents: `claude`, `codex`, `copilot`, `cursor`, `gemini`, `opencode`
+
+### Install All Skills at Once (Legacy)
+
+To install all skills in one go (copies instead of symlinks):
 
 ```bash
 # For Claude Code
@@ -47,17 +84,6 @@ curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/head
 # For OpenCode
 curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s opencode
 ```
-
-### Manual Installation
-
-1. Clone or download this repository
-2. Copy the skill directories to your project:
-    - **Claude Code**: `.claude/skills/`
-    - **Codex**: `.codex/skills/`
-    - **GitHub Copilot**: `.github/skills/`
-    - **Cursor**: `.cursor/skills/`
-    - **Gemini**: `.gemini/skills/`
-    - **OpenCode**: `.opencode/skills/`
 
 ## Usage
 
