@@ -1,6 +1,7 @@
 ---
 name: hyva-child-theme
 description: Create a Hyvä child theme in a Magento 2 project. This skill should be used when the user wants to create a new Hyvä child theme, set up a custom theme based on Hyvä, or initialize a new frontend theme directory structure. Trigger phrases include "create hyva child theme", "new hyva theme", "setup child theme", "create custom theme", "initialize theme".
+requires: hyva-exec-shell-cmd, hyva-theme-list, hyva-compile-tailwind-css
 ---
 
 # Hyvä Child Theme Creator

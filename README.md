@@ -26,44 +26,54 @@ knowledge for creating Hyva themes, modules, and CMS components.
 
 ## Installation
 
-Always install all skills together, as they often refer to each other.
+### Install Individual Skills (Recommended)
 
-### Quick Install
+Clone this repository, then use `install-hyva-skill.sh` to install individual skills by name.
+Dependencies are resolved automatically.
 
 ```bash
-# For Claude Code
-curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s claude
+git clone https://github.com/hyva-themes/hyva-ai-tools.git
 
-# For Codex
-curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s codex
+# Install a skill for a specific agent (from your project directory)
+./hyva-ai-tool/sinstall-hyva-skill.sh hyva-child-theme claude
 
-# For GitHub Copilot
-curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s copilot
+# Or let the installer auto-detect the agent directory
+./hyva-ai-tool/sinstall-hyva-skill.sh hyva-cms-component
 
-# For Cursor
-curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s cursor
-
-# For Gemini
-curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s gemini
-
-# For OpenCode
-curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s opencode
+# List all available skills
+./hyva-ai-tools/install-hyva-skill.sh --list
 ```
 
-### Manual Installation
+Skills are symlinked into the target agent's skills directory.
+To update all installed skills, simply run `git pull` inside the cloned repository — every symlinked skill picks up the changes immediately.
 
-1. Clone or download this repository
-2. Copy the skill directories to your project:
-    - **Claude Code**: `.claude/skills/`
-    - **Codex**: `.codex/skills/`
-    - **GitHub Copilot**: `.github/skills/`
-    - **Cursor**: `.cursor/skills/`
-    - **Gemini**: `.gemini/skills/`
-    - **OpenCode**: `.opencode/skills/`
+Use `--copy` to copy skills instead of symlinking (e.g. when the repo is on the host but the agent runs in a container):
+
+```bash
+./hyva-ai-tools/install-hyva-skill.sh --copy hyva-child-theme claude
+```
+
+Copied skills won't update automatically with `git pull` — re-run the install command to update them.
+
+When no agent argument is given, the installer will:
+1. Use the `HYVA_SKILLS_AGENT` environment variable if set
+2. Auto-detect an existing agent directory (e.g. `.claude/skills/`) in the current working directory
+3. Prompt you to choose an agent and whether to install globally (`~/`) or locally (`./`)
+
+Supported agents: `claude`, `codex`, `copilot`, `cursor`, `gemini`, `junie`, `opencode`
+
+### Install All Skills at Once (Legacy)
+
+To install all skills in one go (copies instead of symlinks):
+
+```bash
+# Replace "claude" with your agent: codex, copilot, cursor, gemini, junie, opencode
+curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s claude
+```
 
 ## Usage
 
-Once installed, the AI assistant will automatically use these skills when relevant. You can also invoke them directly:
+Once installed, the AI agent will automatically use these skills when relevant. You can also invoke them directly:
 
 - "Create an Alpine component for a dropdown menu"
 - "Create a Hyva child theme"
