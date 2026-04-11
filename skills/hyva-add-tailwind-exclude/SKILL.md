@@ -20,7 +20,7 @@ If a module name was provided by the user when invoking the skill, use it. Other
 
 - If the argument contains `/` (e.g. `vendor/vendor-name/module-name`), use it as-is.
 - If the argument is just a module name (e.g. `magento2-hyva-checkout`):
-  1. Use the current working directory as the project root. Search for the module directory within it.
+  1. Use the current working directory as the project root. Search for a directory matching the name under `vendor/` and `app/code/`.
   - If no match is found, inform the user and stop.
   - If exactly one match is found, derive its relative path from the project root (e.g. `vendor/hyva-themes/magento2-hyva-checkout`).
   - If multiple matches are found, list them and ask the user which one to use. Wait for the answer before proceeding.
@@ -32,7 +32,7 @@ For each target `hyva.config.json`:
 1. Read the file.
 2. Check if an entry with the resolved path already exists in `tailwind.exclude`. If it does, inform the user and skip that file.
 3. Add `{ "src": "<PATH>" }` to the `tailwind.exclude` array.
-4. Write the updated JSON back, preserving 2-space indentation.
+4. Write the updated JSON back, preserving 2-space indentation and trailing newline.
 
 ## Step 4: Confirm
 
