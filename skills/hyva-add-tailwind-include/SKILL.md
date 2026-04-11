@@ -1,6 +1,7 @@
 ---
 name: hyva-add-tailwind-include
 description: Add a module path to the `include` list in `hyva.config.json` for Tailwind configuration. Use this skill when the user wants to include a module in Tailwind CSS compilation. Trigger phrases include "include module", "add to include", "hyva-add-tailwind-include", or when a module path needs to be included in Tailwind.
+requires: hyva-theme-list
 ---
 
 # Add Module to Tailwind Include List
