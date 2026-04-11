@@ -1,6 +1,7 @@
 ---
 name: hyva-cms-custom-field
 description: Create custom field types and field handlers for Hyvä CMS components. Use when the user mentions Hyvä, Hyva, or CMS together with custom field, custom input, or modal selector (e.g. hyva custom field, custom cms field, hyva modal selector, custom hyva input, custom cms input). Do not use for generic form or UI work outside Hyvä CMS.
+requires: hyva-exec-shell-cmd, hyva-create-module
 ---
 
 # Hyvä CMS Custom Field Type Creator
