@@ -67,14 +67,16 @@ Once installed, the AI agent will automatically use these skills when relevant. 
 
 ### Theme & Module Development
 
-| Skill                                                      | Description                                                                             |
-| ---------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| [hyva-child-theme](skills/hyva-child-theme/)               | Create a Hyva child theme with directory structure, Tailwind CSS, and theme inheritance |
-| [hyva-create-module](skills/hyva-create-module/)           | Scaffold new Magento 2 modules in `app/code/`                                           |
-| [hyva-alpine-component](skills/hyva-alpine-component/)     | Write CSP-compatible Alpine.js components for Hyvä themes following best practices      |
-| [hyva-ui-component](skills/hyva-ui-component/)             | Install Hyva UI template-based components (headers, footers, galleries, etc.) to themes |
-| [hyva-render-media-image](skills/hyva-render-media-image/) | Generate responsive `<picture>` elements using the Hyva Media view model                |
-| [hyva-playwright-test](skills/hyva-playwright-test/)       | Write Playwright tests for Hyvä themes with Alpine.js                                   |
+| Skill                                                          | Description                                                                             |
+| -------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| [hyva-add-tailwind-exclude](skills/hyva-add-tailwind-exclude/) | Add a module path to the `exclude` list in `hyva.config.json` for Tailwind CSS          |
+| [hyva-add-tailwind-include](skills/hyva-add-tailwind-include/) | Add a module path to the `include` list in `hyva.config.json` for Tailwind CSS          |
+| [hyva-child-theme](skills/hyva-child-theme/)                   | Create a Hyva child theme with directory structure, Tailwind CSS, and theme inheritance |
+| [hyva-create-module](skills/hyva-create-module/)               | Scaffold new Magento 2 modules in `app/code/`                                           |
+| [hyva-alpine-component](skills/hyva-alpine-component/)         | Write CSP-compatible Alpine.js components for Hyvä themes following best practices      |
+| [hyva-ui-component](skills/hyva-ui-component/)                 | Install Hyva UI template-based components (headers, footers, galleries, etc.) to themes |
+| [hyva-render-media-image](skills/hyva-render-media-image/)     | Generate responsive `<picture>` elements using the Hyva Media view model                |
+| [hyva-playwright-test](skills/hyva-playwright-test/)           | Write Playwright tests for Hyvä themes with Alpine.js                                   |
 
 ### CMS Components
 
