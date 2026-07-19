@@ -72,6 +72,7 @@ Once installed, the AI agent will automatically use these skills when relevant. 
 | [hyva-child-theme](skills/hyva-child-theme/)               | Create a Hyva child theme with directory structure, Tailwind CSS, and theme inheritance |
 | [hyva-create-module](skills/hyva-create-module/)           | Scaffold new Magento 2 modules in `app/code/`                                           |
 | [hyva-alpine-component](skills/hyva-alpine-component/)     | Write CSP-compatible Alpine.js components for Hyvä themes following best practices      |
+| [hyva-modal-dialog](skills/hyva-modal-dialog/)             | Create Hyvä modal dialogs, popups, and confirmation dialogs using `<dialog>` and Alpine.js |
 | [hyva-ui-component](skills/hyva-ui-component/)             | Install Hyva UI template-based components (headers, footers, galleries, etc.) to themes |
 | [hyva-render-media-image](skills/hyva-render-media-image/) | Generate responsive `<picture>` elements using the Hyva Media view model                |
 | [hyva-playwright-test](skills/hyva-playwright-test/)       | Write Playwright tests for Hyvä themes with Alpine.js                                   |
