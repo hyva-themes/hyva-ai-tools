@@ -60,6 +60,7 @@ Once installed, the AI agent will automatically use these skills when relevant. 
 - "Create a Hyva child theme"
 - "Add a CMS component for a hero banner"
 - "Compile Tailwind CSS"
+- "Register a module for Tailwind compilation"
 - "Apply the gallery component from Hyva UI"
 - `/hyva-child-theme` (explicit slash command invocation)
 
@@ -70,6 +71,7 @@ Once installed, the AI agent will automatically use these skills when relevant. 
 | Skill                                                                 | Description                                                                                  |
 | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
 | [hyva-tailwind-include-exclude](skills/hyva-tailwind-include-exclude/) | Add a module path to the `include` or `exclude` list in `hyva.config.json` for Tailwind CSS |
+| [hyva-register-module-tailwind](skills/hyva-register-module-tailwind/)  | Register a module for Tailwind compilation via `hyva-themes.json` (observer + Tailwind files) |
 | [hyva-child-theme](skills/hyva-child-theme/)                           | Create a Hyva child theme with directory structure, Tailwind CSS, and theme inheritance     |
 | [hyva-create-module](skills/hyva-create-module/)                       | Scaffold new Magento 2 modules in `app/code/`                                               |
 | [hyva-alpine-component](skills/hyva-alpine-component/)                 | Write CSP-compatible Alpine.js components for Hyvä themes following best practices           |
