@@ -43,11 +43,11 @@ Use the current working directory as the project root. If a module name was prov
 
 ### For an exclude
 
-The exclude path must match the module's registered source path, which the build reads from `app/etc/hyva-themes.json` (a module can only be excluded if it is registered there).
+The exclude path must match the module's registered source path, which the build reads from `app/etc/hyva-themes.json` (a module can only be excluded if it is registered there). Modules register themselves for that file with the `hyva-register-module-tailwind` skill. Compatibility modules that use `CompatModuleRegistry` are registered automatically.
 
 - Read `app/etc/hyva-themes.json` and find the entry for the module, matching by its `Vendor_Module` name or by the provided path or directory name.
 - Use that entry's registered source path verbatim. It often ends in `/src` (e.g. `vendor/hyva-themes/magento2-hyva-checkout/src`).
-- If the module is not listed there, it is not imported by the build and cannot be excluded. Inform the user and stop.
+- If the module is not listed there, it is not imported by the build and cannot be excluded. Inform the user and stop. If they intended the module to be compiled, register it first with the `hyva-register-module-tailwind` skill (skip that skill for compatibility modules that use `CompatModuleRegistry`; those are already registered automatically).
 
 ### For an include
 
