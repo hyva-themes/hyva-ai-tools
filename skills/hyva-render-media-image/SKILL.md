@@ -29,6 +29,8 @@ The user may provide image data in one of these ways:
 
 **Option B: PHP variable** - The user provides a variable name (e.g., `$imageData`, `$heroImage`). Inform the user of the required array structure documented in `references/rendering-images.md` under `## Image Configuration Format`.
 
+If the user cannot be asked (subagent or non-interactive run), use the values given in the request, generate the code with clearly marked placeholders for anything missing, and list what must be filled in.
+
 ### 2. Generate the Code
 
 Refer to `references/rendering-images.md` for the complete API reference, code examples, and all configuration options.

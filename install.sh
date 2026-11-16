@@ -9,6 +9,7 @@
 #   curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s copilot
 #   curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s cursor
 #   curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s gemini
+#   curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s antigravity
 #   curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s junie
 #   curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s opencode
 #
@@ -60,10 +61,11 @@ usage() {
     echo ""
     echo "Platforms:"
     echo "  claude    Install skills for Claude Code (.claude/skills/)"
-    echo "  codex     Install skills for Codex (.codex/skills/)"
-    echo "  copilot   Install skills for GitHub Copilot (.copilot/skills/)"
+    echo "  codex     Install skills for Codex (.agents/skills/, or .codex/skills/ if it already exists)"
+    echo "  copilot   Install skills for GitHub Copilot (.github/skills/)"
     echo "  cursor    Install skills for Cursor (.cursor/skills/)"
-    echo "  gemini    Install skills for Gemini (.gemini/skills/)"
+    echo "  gemini    Install skills for Gemini CLI and Antigravity (.agents/skills/, or .gemini/skills/ if it already exists)"
+    echo "  antigravity  Alias for gemini"
     echo "  junie     Install skills for Junie (.junie/skills/)"
     echo "  opencode  Install skills for OpenCode (.opencode/skills/)"
     echo ""
@@ -73,6 +75,7 @@ usage() {
     echo "  curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s copilot"
     echo "  curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s cursor"
     echo "  curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s gemini"
+    echo "  curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s antigravity"
     echo "  curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s junie"
     echo "  curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s opencode"
     echo ""
@@ -89,7 +92,12 @@ get_skills_dir() {
             echo ".claude/skills"
             ;;
         codex)
-            echo ".codex/skills"
+            # Codex reads .agents/skills. Keep using a legacy .codex/skills if present.
+            if [ -d "$(detect_project_root)/.codex/skills" ]; then
+                echo ".codex/skills"
+            else
+                echo ".agents/skills"
+            fi
             ;;
         copilot)
             echo ".github/skills"
@@ -97,8 +105,14 @@ get_skills_dir() {
         cursor)
             echo ".cursor/skills"
             ;;
-        gemini)
-            echo ".gemini/skills"
+        gemini|antigravity)
+            # Gemini CLI and Antigravity read .agents/skills, the only project
+            # location Antigravity reads. Keep using an existing .gemini/skills.
+            if [ -d "$(detect_project_root)/.gemini/skills" ]; then
+                echo ".gemini/skills"
+            else
+                echo ".agents/skills"
+            fi
             ;;
         junie)
             echo ".junie/skills"
@@ -107,8 +121,9 @@ get_skills_dir() {
             echo ".opencode/skills"
             ;;
         *)
-            print_error "Unknown platform: $platform"
-            usage
+            # stderr, because this function is called inside $(...)
+            print_error "Unknown platform: $platform" >&2
+            usage >&2
             ;;
     esac
 }

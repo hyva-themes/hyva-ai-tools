@@ -8,6 +8,8 @@ requires: hyva-exec-shell-cmd, hyva-theme-list
 
 Compiles Tailwind CSS for Hyvä themes in Magento 2. Handles both production builds and development watch mode.
 
+**Skill deps** (read via `<skill_path>/../{name}/SKILL.md`, where `<skill_path>` is the directory containing this SKILL.md file): `hyva-exec-shell-cmd`, `hyva-theme-list`
+
 ## Step 1: Detect Environment & Set Command Wrapper
 
 Use the `hyva-exec-shell-cmd` skill to detect the environment and determine the appropriate command wrapper. All npm commands below show the core command; wrap them according to the detected environment.
@@ -16,7 +18,13 @@ Use the `hyva-exec-shell-cmd` skill to detect the environment and determine the 
 
 If no theme path provided, invoke the `hyva-theme-list` skill to discover available themes. Filter the results to only include themes in `app/design/frontend/` by default. Themes in `vendor/hyva-themes/` require explicit user request.
 
-**If no themes found:** Inform the user that no Hyvä themes with Tailwind configuration were found in `app/design/frontend/`. Ask if they want to check `vendor/hyva-themes/` instead, or if they need to create a child theme first using the `hyva-child-theme` skill.
+**If exactly one theme is found:** Use it.
+
+**If several themes are found:** Ask the user which theme to compile.
+
+**If no themes found:** Inform the user that no Hyvä themes with Tailwind configuration were found in `app/design/frontend/`. Ask if they want to check `vendor/hyva-themes/` instead, or if they need to create a child theme first (optionally with the `hyva-child-theme` skill, if it is installed).
+
+**Non-interactive runs:** If the user cannot be asked (subagent or non-interactive run), do not choose between several themes and do not fall back to `vendor/hyva-themes/`. Stop and report that a theme path is required, listing the themes that were found.
 
 ## Step 3: Install Dependencies & Build
 

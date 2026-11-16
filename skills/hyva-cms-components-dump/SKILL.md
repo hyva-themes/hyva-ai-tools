@@ -13,6 +13,8 @@ modules.
 and determine the command wrapper. Run all commands below from the Magento project
 root.
 
+**Skill deps** (read via `<skill_path>/../{name}/SKILL.md`, where `<skill_path>` is the directory containing this SKILL.md file): `hyva-exec-shell-cmd`
+
 ## Step 1: Prefer the bin/magento CLI commands
 
 Modern Hyvä CMS ships console commands that report the live, project-accurate set of

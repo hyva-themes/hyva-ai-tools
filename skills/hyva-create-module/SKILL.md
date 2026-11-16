@@ -10,6 +10,8 @@ This utility skill creates new Magento 2 modules in `app/code/`. It is designed 
 
 **Command execution:** For commands that need to run inside the development environment (e.g., `bin/magento`), use the `hyva-exec-shell-cmd` skill to detect the environment and determine the appropriate command wrapper.
 
+**Skill deps** (read via `<skill_path>/../{name}/SKILL.md`, where `<skill_path>` is the directory containing this SKILL.md file): `hyva-exec-shell-cmd`
+
 ## Parameters
 
 When invoking this skill, the calling skill should provide:
