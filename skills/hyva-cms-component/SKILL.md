@@ -12,6 +12,10 @@ This skill guides the interactive creation of custom Hyvä CMS components for Ma
 
 **Command execution:** For commands that need to run inside the development environment (e.g., `bin/magento`), use the `hyva-exec-shell-cmd` skill to detect the environment and determine the appropriate command wrapper.
 
+**Skill deps** (read via `<skill_path>/../{name}/SKILL.md`, where `<skill_path>` is the directory containing this SKILL.md file): `hyva-exec-shell-cmd`, `hyva-create-module`, `hyva-cms-components-dump`, `hyva-render-media-image`
+
+**Non-interactive runs:** If the user cannot be asked (subagent or non-interactive run), take the inputs from the request. Stop and report what is missing if any of these were not given: the target module (or the vendor name for a new module), the component name and label, and the fields (a preset name or a field list). Choose the category from the component's purpose, and create a single template without variants unless variants were requested.
+
 ## Workflow
 
 ### Step 1: Module Selection
@@ -422,25 +426,12 @@ $children = $block->getData('children') ?: [];
 
 ## Resources
 
-### references/critical-patterns.md
-
-**READ THIS FIRST** - Essential patterns and common mistakes including:
-- Correct `children` configuration (root-level vs field type)
-- Proper field validation with `attributes`
-- Default value syntax
-- Quick checklist before generating components
-
-Read this file before generating any component to avoid common errors.
-
-### references/example-component.md
-
-Complete end-to-end example showing a Feature Card component with:
-- Full `components.json` definition
-- Matching PHTML template with all field types
-- Supporting module files (registration.php, module.xml, composer.json)
-- Directory structure overview
-
-Read this file when you need a reference for how all the pieces fit together.
+- `references/critical-patterns.md`: **read before generating any component.** Correct `children` configuration (root-level vs field type), field validation with `attributes`, default value syntax, and a checklist to run before generating.
+- `references/example-component.md`: complete Feature Card example with `components.json`, a PHTML template using all field types, the supporting module files and the directory structure. Read to see how the pieces fit together.
+- `references/field-types.md`: all field types with configuration syntax and examples, validation attributes, conditional visibility (`show_if`/`hide_if`) and field presets. Read when generating field configurations.
+- `references/variant-support.md`: directory structure, `components.json` configuration and template patterns for variants. Read when the component needs multiple layout options.
+- `references/troubleshooting.md`: schema validation errors, component not visible in the editor, template not rendering, live editor not working, image display issues, and fallbacks when dependent skills are unavailable. Read when an error occurs.
+- `assets/templates/component/template.phtml.tpl`: base PHTML structure for CMS components. Placeholders: `{{CONTENT_FIELDS}}` (PHP variable declarations) and `{{TEMPLATE_BODY}}` (HTML template content).
 
 ### Component/field schema (read from the project, with a bundled fallback)
 
@@ -459,47 +450,6 @@ structure or when encountering schema validation errors.
 > The bundled `references/component-schema.md` is a fallback snapshot. To refresh it
 > after a Hyvä CMS update, regenerate it by reading the `jsonschema/*.json` files
 > above — no helper script is required.
-
-### references/field-types.md
-
-Complete reference for all supported field types including:
-- Field configuration syntax
-- All available field types with examples
-- Validation attributes
-- Conditional visibility (show_if/hide_if)
-- Field presets for common patterns
-
-Read this file when generating field configurations.
-
-### references/variant-support.md
-
-Guide for implementing template variants including:
-- Directory structure for variant templates
-- Variant field configuration in components.json
-- Template implementation patterns
-- Common variant patterns and best practices
-
-Read this file when the user wants multiple layout options for a component.
-
-### references/troubleshooting.md
-
-Solutions for common issues including:
-- Schema validation errors
-- Component not visible in editor
-- Template not rendering
-- Live editor not working
-- Image display issues
-- Fallbacks when dependent skills are unavailable
-
-Read this file when encountering errors during component creation or testing.
-
-### assets/templates/component/template.phtml.tpl
-
-Base PHTML structure for CMS components.
-
-Placeholders:
-- `{{CONTENT_FIELDS}}` - PHP variable declarations
-- `{{TEMPLATE_BODY}}` - HTML template content
 
 ## Important Guidelines
 

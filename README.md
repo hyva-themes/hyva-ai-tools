@@ -43,6 +43,8 @@ When no agent argument is given, the installer will:
 
 Supported agents: `claude`, `codex`, `copilot`, `cursor`, `gemini`, `junie`, `opencode`
 
+Codex skills are installed to `.agents/skills`, the directory current Codex versions read. If a `.codex/skills` directory from an older setup already exists, it is used instead.
+
 ### Install All Skills at Once (Legacy)
 
 To install all skills in one go (copies instead of symlinks):

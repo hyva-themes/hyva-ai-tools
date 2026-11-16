@@ -60,7 +60,7 @@ usage() {
     echo ""
     echo "Platforms:"
     echo "  claude    Install skills for Claude Code (.claude/skills/)"
-    echo "  codex     Install skills for Codex (.codex/skills/)"
+    echo "  codex     Install skills for Codex (.agents/skills/, or .codex/skills/ if it already exists)"
     echo "  copilot   Install skills for GitHub Copilot (.copilot/skills/)"
     echo "  cursor    Install skills for Cursor (.cursor/skills/)"
     echo "  gemini    Install skills for Gemini (.gemini/skills/)"
@@ -89,7 +89,12 @@ get_skills_dir() {
             echo ".claude/skills"
             ;;
         codex)
-            echo ".codex/skills"
+            # Codex reads .agents/skills. Keep using a legacy .codex/skills if present.
+            if [ -d "$(detect_project_root)/.codex/skills" ]; then
+                echo ".codex/skills"
+            else
+                echo ".agents/skills"
+            fi
             ;;
         copilot)
             echo ".github/skills"

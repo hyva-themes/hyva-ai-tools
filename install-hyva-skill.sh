@@ -42,7 +42,7 @@ INSTALLED_IN_SESSION=""
 INSTALL_MODE="symlink"
 
 # Known agent dot-directories
-KNOWN_AGENT_DIRS=".claude .codex .github .cursor .gemini .junie .opencode"
+KNOWN_AGENT_DIRS=".claude .agents .codex .github .cursor .gemini .junie .opencode"
 
 usage() {
     echo "Usage: $(basename "$0") [--copy] <skill-name> [agent]"
@@ -69,11 +69,25 @@ usage() {
     exit 1
 }
 
+# Codex reads skills from .agents/skills. Older Codex versions used .codex/skills,
+# so an existing .codex/skills directory keeps being used.
+codex_dir() {
+    if [ -d "./.codex/skills" ]; then
+        echo ".codex"
+    elif [ -d "./.agents" ]; then
+        echo ".agents"
+    elif [ -d "$HOME/.codex/skills" ]; then
+        echo ".codex"
+    else
+        echo ".agents"
+    fi
+}
+
 # Map agent name to its dot-directory
 agent_to_dir() {
     case "$1" in
         claude)   echo ".claude" ;;
-        codex)    echo ".codex" ;;
+        codex)    codex_dir ;;
         copilot)  echo ".github" ;;
         cursor)   echo ".cursor" ;;
         gemini)   echo ".gemini" ;;
@@ -116,6 +130,7 @@ dir_to_agent() {
     case "$1" in
         .claude)   echo "claude" ;;
         .codex)    echo "codex" ;;
+        .agents)   echo "codex" ;;
         .github)   echo "copilot" ;;
         .cursor)   echo "cursor" ;;
         .gemini)   echo "gemini" ;;

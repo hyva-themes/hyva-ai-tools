@@ -8,7 +8,9 @@ requires: hyva-theme-list, hyva-compile-tailwind-css
 
 Adds a module path as a `{ "src": "<PATH>" }` entry to either the `tailwind.include` or `tailwind.exclude` array in a theme's `hyva.config.json`. This is the Hyvä 1.4+ / Tailwind v4 mechanism; Step 3 handles older setups.
 
-**Skill deps** (read via `<skill_path>/../{name}/SKILL.md`): `hyva-theme-list`, `hyva-compile-tailwind-css`
+**Skill deps** (read via `<skill_path>/../{name}/SKILL.md`, where `<skill_path>` is the directory containing this SKILL.md file): `hyva-theme-list`, `hyva-compile-tailwind-css`
+
+**Non-interactive runs:** Where a step says to ask the user and the user cannot be asked (subagent or non-interactive run), stop and report which input is missing. Do not guess, and do not edit files under `vendor/` without confirmation.
 
 ## Step 1: Determine the Target List
 

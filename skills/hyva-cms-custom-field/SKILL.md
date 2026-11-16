@@ -16,6 +16,10 @@ This skill guides the creation of custom field types and field handlers for Hyv√
 
 **Command execution:** For commands that need to run inside the development environment (e.g., `bin/magento`), use the `hyva-exec-shell-cmd` skill to detect the environment and determine the appropriate command wrapper.
 
+**Skill deps** (read via `<skill_path>/../{name}/SKILL.md`, where `<skill_path>` is the directory containing this SKILL.md file): `hyva-exec-shell-cmd`, `hyva-create-module`
+
+**Non-interactive runs:** If the user cannot be asked (subagent or non-interactive run), take the inputs from the request. Stop and report what is missing if the target module (or the vendor and module name for a new module), the field type name or its purpose were not given. Choose the UI pattern, data structure and validation from the stated purpose, and state the choices in the final report.
+
 ## Workflow
 
 ### Step 1: Module Selection
