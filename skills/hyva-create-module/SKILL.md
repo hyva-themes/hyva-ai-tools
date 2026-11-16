@@ -71,9 +71,11 @@ Use template `assets/templates/module.xml.tpl`:
 
 If the calling skill requests it, run `bin/magento setup:upgrade` using the `hyva-exec-shell-cmd` skill for the appropriate wrapper.
 
-### Step 5: Offer Tailwind Registration (Optional)
+### Step 5: Register for Tailwind Compilation (Optional)
 
-If the new module will ship its own Tailwind styles or config, offer to register it for Tailwind compilation using the `hyva-register-module-tailwind` skill. That skill adds the `hyva_config_generate_before` observer, the module's `view/frontend/tailwind/` files, and regenerates `app/etc/hyva-themes.json`. Do not do this by default for a plain module scaffold.
+Only when the user or the calling skill asked for the new module to ship its own Tailwind styles or config: register it for Tailwind compilation (optionally with the `hyva-register-module-tailwind` skill, if it is installed; without that skill, do not register it by hand and state in the final report that it is not registered). That skill adds the `hyva_config_generate_before` observer, the module's `view/frontend/tailwind/` files, and regenerates `app/etc/hyva-themes.json`.
+
+Do not do this, and do not ask about it, for a plain module scaffold.
 
 ## Error Handling
 
