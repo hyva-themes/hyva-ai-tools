@@ -10,11 +10,13 @@ This skill creates a complete Hyvä child theme with the proper directory struct
 
 **Command execution:** For commands that need to run inside the development environment (e.g., `bin/magento`), use the `hyva-exec-shell-cmd` skill to detect the environment and determine the appropriate command wrapper.
 
+**Skill deps** (read via `<skill_path>/../{name}/SKILL.md`, where `<skill_path>` is the directory containing this SKILL.md file): `hyva-exec-shell-cmd`, `hyva-theme-list`, `hyva-compile-tailwind-css`
+
 ## Workflow
 
 ### Step 1: Gather Theme Information
 
-Prompt the user to provide the following information:
+Use the vendor name and theme name from the request if they were given. Otherwise prompt the user to provide them. If the user cannot be asked (subagent or non-interactive run), stop and report that a vendor name and a theme name are required.
 
 **Vendor Name**: The vendor/company namespace (e.g., "Acme", "MyCompany")
 - Must be PascalCase
@@ -37,6 +39,8 @@ If the user has NOT specified a parent theme, discover available options by invo
 Present the user with options to select a parent theme:
 - **Hyvä default themes**: `Hyva/default-csp` (if installed) or `Hyva/default`
 - **Existing Hyvä child themes**: List themes returned by the skill as `{Vendor}/{ThemeName}`
+
+If the user cannot be asked (subagent or non-interactive run), use `Hyva/default-csp` if it is installed, otherwise `Hyva/default`, and state the chosen parent in the final report.
 
 **Parent theme paths for later steps:**
 - Hyvä default themes: `vendor/hyva-themes/magento2-default-theme-csp` or `vendor/hyva-themes/magento2-default-theme`

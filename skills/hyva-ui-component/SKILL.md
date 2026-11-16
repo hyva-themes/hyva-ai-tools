@@ -12,6 +12,10 @@ Applies Hyva UI template-based (non-CMS) components to a Hyvä theme by copying 
 
 **Command execution:** For any commands that need to run inside the development environment (e.g., `bin/magento` commands), use the `hyva-exec-shell-cmd` skill to detect the environment and determine the appropriate command wrapper.
 
+**Skill deps** (read via `<skill_path>/../{name}/SKILL.md`, where `<skill_path>` is the directory containing this SKILL.md file): `hyva-exec-shell-cmd`, `hyva-theme-list`, `hyva-child-theme`, `hyva-compile-tailwind-css`
+
+**Non-interactive runs:** If the user cannot be asked (subagent or non-interactive run), take the theme, component and variant from the request, and stop and report which of them is missing. If Hyva UI is not installed (Step 0), stop and report that. Skip Step 7: do not compile Tailwind CSS, and state in the final report that the styles need recompiling.
+
 ## Step 0: Verify Hyva UI Installation
 
 ```bash
@@ -21,8 +25,6 @@ ls vendor/hyva-themes/hyva-ui/components/ 2>/dev/null
 **If NOT found**, offer options: (A) User provides custom extraction path, (B) `composer require --dev hyva-themes/hyva-ui`, (C) Download from https://hyva.io/my-account/my-downloads/
 
 After install, refresh catalog: `<skill_path>/scripts/refresh_catalog.sh {hyva_ui_path} <skill_path>/references/components.md`
-
-Where `<skill_path>` is the directory containing this SKILL.md file.
 
 ## Step 1: Identify Theme Path
 

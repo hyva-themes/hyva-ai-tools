@@ -15,7 +15,11 @@ Dependencies are resolved automatically.
 git clone https://github.com/hyva-themes/hyva-ai-tools.git
 
 # Install a skill for a specific agent (from your project directory)
+# The installer asks whether to install into the project (./) or globally (~/)
 ./hyva-ai-tools/install-hyva-skill.sh hyva-child-theme claude
+
+# Skip the question with --project or --global (required in scripts and CI)
+./hyva-ai-tools/install-hyva-skill.sh --project hyva-child-theme claude
 
 # Or let the installer auto-detect the agent directory
 ./hyva-ai-tools/install-hyva-skill.sh hyva-cms-component
@@ -39,16 +43,22 @@ When no agent argument is given, the installer will:
 
 1. Use the `HYVA_SKILLS_AGENT` environment variable if set
 2. Auto-detect an existing agent directory (e.g. `.claude/skills/`) in the current working directory
-3. Prompt you to choose an agent and whether to install globally (`~/`) or locally (`./`)
+3. Prompt you to choose an agent
 
-Supported agents: `claude`, `codex`, `copilot`, `cursor`, `gemini`, `junie`, `opencode`
+The installer then always asks whether to install into the project (`./`) or globally (`~/`), unless `--project` or `--global` is given.
+
+Supported agents: `claude`, `codex`, `copilot`, `cursor`, `gemini`, `antigravity`, `junie`, `opencode`
+
+`antigravity` is an alias for `gemini`: both install to the same locations.
+
+Project installs for `codex` and `gemini` (or `antigravity`) go to `.agents/skills`, which Codex, Gemini CLI and Antigravity all read. If a `.codex/skills` or `.gemini/skills` directory from an older setup already exists, it is used instead. Global installs go to `~/.agents/skills` for Codex (or `~/.codex/skills` if that already exists) and to `~/.gemini/skills` for Gemini CLI and Antigravity CLI. The Antigravity app and IDE do not read `~/.gemini/skills`, so use a project install for those.
 
 ### Install All Skills at Once (Legacy)
 
-To install all skills in one go (copies instead of symlinks):
+To install all skills in one go (copies instead of symlinks). This always installs into the project, using the same directories as above (`.agents/skills` for `codex`, `gemini` and `antigravity`, unless `.codex/skills` or `.gemini/skills` already exists):
 
 ```bash
-# Replace "claude" with your agent: codex, copilot, cursor, gemini, junie, opencode
+# Replace "claude" with your agent: codex, copilot, cursor, gemini, antigravity, junie, opencode
 curl -fsSL https://raw.githubusercontent.com/hyva-themes/hyva-ai-tools/refs/heads/main/install.sh | sh -s claude
 ```
 

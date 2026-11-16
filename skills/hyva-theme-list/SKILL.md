@@ -17,7 +17,7 @@ Run the discovery script to list all Hyvä themes:
 bash <skill_path>/scripts/list_hyva_themes.sh
 ```
 
-Where `<skill_path>` is the directory containing this SKILL.md file (e.g., `.claude/skills/hyva-theme-list`).
+Where `<skill_path>` is the directory containing this SKILL.md file.
 
 **Output format:** One theme path per line (relative to project root), or empty output if no themes found.
 
