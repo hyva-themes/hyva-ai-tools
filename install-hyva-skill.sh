@@ -4,12 +4,16 @@
 # Installs a single Hyva skill (and its dependencies) via symlink
 #
 # Usage:
-#   install-hyva-skill.sh [--copy] <skill-name> [agent]
+#   install-hyva-skill.sh [--copy] [--project|--global] <skill-name> [agent]
+#   install-hyva-skill.sh --list
 #
 # Examples:
 #   install-hyva-skill.sh hyva-child-theme claude
 #   install-hyva-skill.sh hyva-theme-list
 #   install-hyva-skill.sh --copy hyva-child-theme claude
+#   install-hyva-skill.sh --project hyva-child-theme codex
+#
+# Without --project or --global the installer asks where to install.
 #
 # Environment variables:
 #   HYVA_SKILLS_AGENT   Default agent when not specified (e.g. "claude")
@@ -28,7 +32,7 @@ NC=$(printf '\033[0m')
 
 print_success() { printf '%s[OK]%s %s\n' "$GREEN" "$NC" "$1"; }
 print_warning() { printf '%s[WARN]%s %s\n' "$YELLOW" "$NC" "$1"; }
-print_error()   { printf '%s[ERROR]%s %s\n' "$RED" "$NC" "$1"; }
+print_error()   { printf '%s[ERROR]%s %s\n' "$RED" "$NC" "$1" >&2; }
 print_info()    { printf '%s[INFO]%s %s\n' "$BLUE" "$NC" "$1"; }
 
 # Resolve the real path of the repo root (where this script lives)
@@ -41,21 +45,29 @@ INSTALLED_IN_SESSION=""
 # Install mode: "symlink" (default) or "copy"
 INSTALL_MODE="symlink"
 
+# Install location: "project", "global", or empty to ask the user
+INSTALL_SCOPE=""
+
 # Known agent dot-directories
 KNOWN_AGENT_DIRS=".claude .agents .codex .github .cursor .gemini .junie .opencode"
 
 usage() {
-    echo "Usage: $(basename "$0") [--copy] <skill-name> [agent]"
+    echo "Usage: $(basename "$0") [--copy] [--project|--global] <skill-name> [agent]"
     echo "       $(basename "$0") --list"
     echo ""
     echo "Arguments:"
     echo "  skill-name   Name of the skill to install (e.g. hyva-child-theme)"
-    echo "  agent        Target agent: claude, codex, copilot, cursor, gemini, junie, opencode"
+    echo "  agent        Target agent: claude, codex, copilot, cursor, gemini, antigravity, junie, opencode"
+    echo "               (antigravity is an alias for gemini)"
     echo "               If omitted, auto-detected or prompted."
     echo ""
     echo "Options:"
     echo "  --copy       Copy skills instead of symlinking (useful for containers)"
+    echo "  --project    Install into the current project (./) without asking"
+    echo "  --global     Install into the home directory (~/) without asking"
+    echo "               Without --project or --global the installer always asks."
     echo "  --list       List all available skill names and exit"
+    echo "  -h, --help   Show this help"
     echo ""
     echo "Environment variables:"
     echo "  HYVA_SKILLS_AGENT   Default agent when not specified on command line"
@@ -66,50 +78,82 @@ usage() {
             echo "  $(basename "$skill_path")"
         fi
     done
-    exit 1
+    exit "${1:-1}"
 }
 
-# Codex reads skills from .agents/skills. Older Codex versions used .codex/skills,
-# so an existing .codex/skills directory keeps being used.
-codex_dir() {
-    if [ -d "./.codex/skills" ]; then
-        echo ".codex"
-    elif [ -d "./.agents" ]; then
-        echo ".agents"
-    elif [ -d "$HOME/.codex/skills" ]; then
-        echo ".codex"
-    else
-        echo ".agents"
-    fi
-}
-
-# Map agent name to its dot-directory
+# Map agent name to its own dot-directory. Exits on an unknown agent name.
 agent_to_dir() {
     case "$1" in
         claude)   echo ".claude" ;;
-        codex)    codex_dir ;;
+        codex)    echo ".codex" ;;
         copilot)  echo ".github" ;;
         cursor)   echo ".cursor" ;;
-        gemini)   echo ".gemini" ;;
+        gemini|antigravity) echo ".gemini" ;;
         junie)    echo ".junie" ;;
         opencode) echo ".opencode" ;;
         *)
-            print_error "Unknown agent: $1" >&2
-            echo "Supported agents: claude, codex, copilot, cursor, gemini, junie, opencode" >&2
+            print_error "Unknown agent: $1"
+            echo "Supported agents: claude, codex, copilot, cursor, gemini, antigravity, junie, opencode" >&2
             exit 1
             ;;
     esac
 }
 
+# Abort with an error if the agent name is unknown.
+# Call this directly, not inside $(...), so that the exit stops the script.
+validate_agent() {
+    agent_to_dir "$1" >/dev/null
+}
+
+# Dot-directory for a project (local) install.
+# Codex, Gemini CLI and Antigravity all read .agents/skills in a project, and it is
+# the only project location Antigravity reads. An existing .codex/skills or
+# .gemini/skills directory from an older setup keeps being used.
+agent_local_dir() {
+    _native="$(agent_to_dir "$1")"
+    case "$1" in
+        codex|gemini|antigravity)
+            if [ -d "./$_native/skills" ]; then
+                echo "$_native"
+            else
+                echo ".agents"
+            fi
+            ;;
+        *) echo "$_native" ;;
+    esac
+}
+
+# Dot-directory for a global (home directory) install.
+# Codex reads ~/.agents/skills; an existing ~/.codex/skills keeps being used.
+# Gemini CLI and Antigravity CLI read ~/.gemini/skills.
+agent_global_dir() {
+    _native="$(agent_to_dir "$1")"
+    case "$1" in
+        codex)
+            if [ -d "$HOME/.codex/skills" ]; then
+                echo ".codex"
+            else
+                echo ".agents"
+            fi
+            ;;
+        *) echo "$_native" ;;
+    esac
+}
+
 # Read a line from the user (works even when stdin is piped)
 prompt_user() {
-    if [ ! -t 0 ] && [ ! -c /dev/tty 2>/dev/null ]; then
-        print_error "Cannot prompt for input in non-interactive mode."
-        print_error "Please specify the agent explicitly: $(basename "$0") <skill-name> <agent>"
+    # /dev/tty can exist without being usable (no controlling terminal), so try to open it
+    if ! { : > /dev/tty; } 2>/dev/null; then
+        print_error "Cannot prompt for input without a terminal."
+        print_error "Specify the agent and the location explicitly: $(basename "$0") --project|--global <skill-name> <agent>"
         exit 1
     fi
     printf "%s" "$1" > /dev/tty
-    read -r REPLY < /dev/tty
+    if ! read -r REPLY < /dev/tty; then
+        echo "" > /dev/tty
+        print_error "Installation cancelled."
+        exit 1
+    fi
     echo "$REPLY"
 }
 
@@ -125,12 +169,12 @@ detect_agent_dir() {
     return 1
 }
 
-# Map a dot-directory back to an agent name (for display)
+# Map a dot-directory back to an agent name.
+# .agents is not listed: it is shared by codex, gemini and antigravity.
 dir_to_agent() {
     case "$1" in
         .claude)   echo "claude" ;;
         .codex)    echo "codex" ;;
-        .agents)   echo "codex" ;;
         .github)   echo "copilot" ;;
         .cursor)   echo "cursor" ;;
         .gemini)   echo "gemini" ;;
@@ -152,8 +196,7 @@ resolve_symlink() {
 
 # Extract the requires: field from a skill's SKILL.md frontmatter
 get_requires() {
-    skill_name="$1"
-    skill_file="$SKILLS_SRC/$skill_name/SKILL.md"
+    skill_file="$SKILLS_SRC/$1/SKILL.md"
     if [ ! -f "$skill_file" ]; then
         return
     fi
@@ -163,9 +206,7 @@ get_requires() {
 
 # Check if a skill is already installed in the target directory
 is_skill_installed() {
-    skill_name="$1"
-    target_dir="$2"
-    [ -e "$target_dir/$skill_name" ]
+    [ -e "$2/$1" ]
 }
 
 # Install a single skill as a symlink
@@ -230,72 +271,111 @@ install_skill() {
         fi
     fi
 
-    # Install dependencies
-    deps="$(get_requires "$skill_name")"
-    if [ -n "$deps" ]; then
-        # Use a temp file to avoid subshell variable scoping issues
-        dep_file="$(mktemp "${TMPDIR:-/tmp}/hyva-deps.XXXXXX")"
-        echo "$deps" > "$dep_file"
-        while read -r dep; do
-            if [ -z "$dep" ]; then
-                continue
-            fi
-            if is_skill_installed "$dep" "$target_dir"; then
-                print_info "Dependency already present: $dep"
-                INSTALLED_IN_SESSION="$INSTALLED_IN_SESSION $dep"
-            else
-                print_info "Installing dependency: $dep (required by $skill_name)"
-                install_skill "$dep" "$target_dir" "$skill_name"
-            fi
-        done < "$dep_file"
-        rm -f "$dep_file"
-    fi
+    # Install dependencies. The recursive call overwrites the variables above, so
+    # only the positional parameters ($1 = this skill, $2 = target directory) are
+    # used from here on. Skill names contain no whitespace or glob characters.
+    for dep in $(get_requires "$1"); do
+        if is_skill_installed "$dep" "$2"; then
+            print_info "Dependency already present: $dep"
+            INSTALLED_IN_SESSION="$INSTALLED_IN_SESSION $dep"
+        else
+            print_info "Installing dependency: $dep (required by $1)"
+            install_skill "$dep" "$2" "$1"
+        fi
+    done
 }
 
-# Prompt the user for global vs local install and set TARGET_DIR
-# Args: $1 = agent dot-directory (e.g. .claude)
-resolve_target_dir() {
-    _agent_dir="$1"
-    if [ -d "./$_agent_dir" ]; then
-        TARGET_DIR="./$_agent_dir/skills"
-    else
-        _answer="$(prompt_user "No $_agent_dir directory found in current directory. Install (g)lobally in ~/$_agent_dir/skills or (l)ocally in ./$_agent_dir/skills? [g/l]: ")"
+# Set INSTALL_SCOPE to "project" or "global".
+# Always asks the user, unless --project or --global was given.
+# Args: $1 = project location, $2 = global location (both for display)
+choose_scope() {
+    while [ -z "$INSTALL_SCOPE" ]; do
+        _answer="$(prompt_user "Install in the (p)roject at $1 or (g)lobally at $2? [p/g]: ")"
         case "$_answer" in
-            l|L|local)
-                TARGET_DIR="./$_agent_dir/skills"
-                ;;
-            *)
-                TARGET_DIR="$HOME/$_agent_dir/skills"
-                ;;
+            p|P|project|l|L|local) INSTALL_SCOPE="project" ;;
+            g|G|global)            INSTALL_SCOPE="global" ;;
+            *)                     print_warning "Please answer p or g." ;;
         esac
+    done
+}
+
+# Set TARGET_DIR for an agent
+# Args: $1 = agent name (e.g. claude)
+resolve_target_dir() {
+    validate_agent "$1"
+    _local_dir="$(agent_local_dir "$1")"
+    _global_dir="$(agent_global_dir "$1")"
+    choose_scope "./$_local_dir/skills" "~/$_global_dir/skills"
+    if [ "$INSTALL_SCOPE" = "project" ]; then
+        TARGET_DIR="./$_local_dir/skills"
+    else
+        TARGET_DIR="$HOME/$_global_dir/skills"
     fi
 }
 
-# --- Main ---
+# Set TARGET_DIR after .agents/skills was detected in the project.
+# The project directory is shared by codex, gemini and antigravity, but their
+# global directories differ, so a global install needs to know the agent.
+resolve_shared_target_dir() {
+    choose_scope "./.agents/skills" "the agent's directory in ~/"
+    if [ "$INSTALL_SCOPE" = "project" ]; then
+        TARGET_DIR="./.agents/skills"
+    else
+        AGENT="$(prompt_user "Global install for which agent? (codex/gemini/antigravity): ")"
+        validate_agent "$AGENT"
+        TARGET_DIR="$HOME/$(agent_global_dir "$AGENT")/skills"
+    fi
+}
 
-# Handle --copy flag
-if [ "$1" = "--copy" ]; then
-    INSTALL_MODE="copy"
-    shift
-fi
-
-if [ -z "$1" ]; then
-    print_error "Skill name required"
-    usage
-fi
-
-# Handle --list flag
-if [ "$1" = "--list" ]; then
+list_skills() {
     for skill_path in "$SKILLS_SRC"/hyva-*; do
         if [ -d "$skill_path" ]; then
             basename "$skill_path"
         fi
     done
-    exit 0
-fi
+}
 
-SKILL_NAME="$1"
-AGENT="${2:-}"
+set_scope() {
+    if [ -n "$INSTALL_SCOPE" ] && [ "$INSTALL_SCOPE" != "$1" ]; then
+        print_error "--project and --global cannot be combined"
+        exit 1
+    fi
+    INSTALL_SCOPE="$1"
+}
+
+# --- Main ---
+
+# Parse arguments. Options may appear before, between or after the positional arguments.
+SKILL_NAME=""
+AGENT=""
+for arg in "$@"; do
+    case "$arg" in
+        --copy)            INSTALL_MODE="copy" ;;
+        --project|--local) set_scope "project" ;;
+        --global)          set_scope "global" ;;
+        --list)            list_skills; exit 0 ;;
+        -h|--help)         usage 0 ;;
+        -*)
+            print_error "Unknown option: $arg"
+            usage
+            ;;
+        *)
+            if [ -z "$SKILL_NAME" ]; then
+                SKILL_NAME="$arg"
+            elif [ -z "$AGENT" ]; then
+                AGENT="$arg"
+            else
+                print_error "Unexpected argument: $arg"
+                usage
+            fi
+            ;;
+    esac
+done
+
+if [ -z "$SKILL_NAME" ]; then
+    print_error "Skill name required"
+    usage
+fi
 
 # Validate skill name contains no path separators or traversal sequences
 case "$SKILL_NAME" in
@@ -321,25 +401,32 @@ fi
 # Resolve agent and target directory
 if [ -n "$AGENT" ]; then
     # Agent explicitly provided
-    agent_dir="$(agent_to_dir "$AGENT")"
-    resolve_target_dir "$agent_dir"
+    resolve_target_dir "$AGENT"
 else
     # No agent specified - try to resolve
     if [ -n "${HYVA_SKILLS_AGENT:-}" ]; then
         # Environment variable set - use it directly
         AGENT="$HYVA_SKILLS_AGENT"
-        agent_dir="$(agent_to_dir "$AGENT")"
-        resolve_target_dir "$agent_dir"
+        resolve_target_dir "$AGENT"
         print_info "Using agent from HYVA_SKILLS_AGENT: $AGENT"
     else
         # Try auto-detection
         detected_dir="$(detect_agent_dir || true)"
         if [ -n "$detected_dir" ]; then
-            detected_agent="$(dir_to_agent "$detected_dir")"
-            answer="$(prompt_user "Detected $detected_agent agent ($detected_dir/skills). Install there? [Y/n/agent-name]: ")"
+            if [ "$detected_dir" = ".agents" ]; then
+                answer="$(prompt_user "Detected .agents/skills (shared by codex, gemini and antigravity). Install there? [Y/n/agent-name]: ")"
+            else
+                detected_agent="$(dir_to_agent "$detected_dir")"
+                answer="$(prompt_user "Detected $detected_agent agent ($detected_dir/skills). Install for this agent? [Y/n/agent-name]: ")"
+            fi
             case "$answer" in
                 ""|y|Y|yes|Yes)
-                    TARGET_DIR="./$detected_dir/skills"
+                    if [ "$detected_dir" = ".agents" ]; then
+                        resolve_shared_target_dir
+                    else
+                        AGENT="$detected_agent"
+                        resolve_target_dir "$AGENT"
+                    fi
                     ;;
                 n|N|no|No)
                     print_error "Installation cancelled."
@@ -348,19 +435,17 @@ else
                 *)
                     # User specified an alternative agent
                     AGENT="$answer"
-                    agent_dir="$(agent_to_dir "$AGENT")"
-                    resolve_target_dir "$agent_dir"
+                    resolve_target_dir "$AGENT"
                     ;;
             esac
         else
             # Nothing detected, ask the user
-            AGENT="$(prompt_user "No agent directory detected. Enter agent name (claude/codex/copilot/cursor/gemini/junie/opencode): ")"
+            AGENT="$(prompt_user "No agent directory detected. Enter agent name (claude/codex/copilot/cursor/gemini/antigravity/junie/opencode): ")"
             if [ -z "$AGENT" ]; then
                 print_error "No agent specified."
                 exit 1
             fi
-            agent_dir="$(agent_to_dir "$AGENT")"
-            resolve_target_dir "$agent_dir"
+            resolve_target_dir "$AGENT"
         fi
     fi
 fi
