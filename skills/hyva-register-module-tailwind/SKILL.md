@@ -123,7 +123,7 @@ If `module.css` is not present, the build looks for `tailwind.config.js` and `ta
 
 **Tailwind v4 theme:**
 
-- `tailwind.config.js`: if this file exists, the build adds a generic `@source` directive to scan all `.phtml` and `.xml` files within the module. It does not deep-merge the config file. For `hyva-sources`, that generic scan is generated only when `tailwind.config.js` is present (unless `module.css` is used instead).
+- `tailwind.config.js`: if this file exists, the build adds a generic `@source` directive to scan all `.phtml` and `.xml` files within the module. It does not deep-merge the config file.
 - `tailwind-source.css`: `@import` statements are added to the build. Paths inside the file must be explicit relative paths (e.g. `@import "./components/widget.css";`).
 
 The legacy method exists for backward compatibility. Prefer `module.css` for all new development.
